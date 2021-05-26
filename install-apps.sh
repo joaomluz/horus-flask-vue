@@ -23,6 +23,7 @@ pip install Flask==1.1.2 Flask-Cors==3.0.10 pytest==6.1.1 Flask-SQLAlchemy==2.5.
 echo "[DB] Build"
 python3 "${INSTALL_DIR}/backend/create_db.py"
 inactivate 2> /dev/null
+chmod +x run-back-end.sh
 
 echo ""
 echo "Configuring Vue"
