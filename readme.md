@@ -8,7 +8,7 @@ Objetivo geral: Criar uma pequena aplicação para que um usuário possa gerenci
 * [Requirements](#requirements)
 * [Installation](#installation)
 * [Backend](#backend)
-    * [Queries & Routes](#queries-n-routes)
+    * [Queries and Routes](#queries-n-routes)
     * [Starting up backend](#starting-up-backend)
     * [Testing backend](#testing-backend)
 ## Before start
@@ -56,7 +56,7 @@ Sua estrutura de pastas é demonstrada a seguir:
 +-- create_db.py    # Script básico para criação inicial do banco
 ```
 
-### Queries & Routes
+### Queries and Routes
 O endereço utilizado do servidor para essa documentação será 127.0.0.1, mas para efeitos de demonstração o servidor escuta no "0.0.0.0", então se seu linux tiver conectado à um roteador você poderá acessar o servidor de fora em um endereço local.   
 
 As respostas serão dadas em JSON.   
