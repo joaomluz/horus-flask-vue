@@ -81,13 +81,16 @@ def new_contact():
     if not request.args.get("contact_name") or not request.args.get("contact_phone"):
         abort(400)
 
-    try:
-        new_entry = models.Post(request.args.get("contact_name"), request.args.get("contact_phone"))
-        db.session.add(new_entry)
-        db.session.commit()
-        result = {"status": 1}
-    except Exception as e:
-        result = {"status": 0, "error": repr(e)}
+    if db.session.query(models.Post).filter_by(contact_phone=request.args.get("contact_phone")).first() is None:
+        try:
+            new_entry = models.Post(request.args.get("contact_name"), request.args.get("contact_phone"))
+            db.session.add(new_entry)
+            db.session.commit()
+            result = {"status": 1}
+        except Exception as e:
+            result = {"status": 0, "error": repr(e)}
+    else:
+        result = {"status": 0, "error": "Phone exists"}
 
     return jsonify(result)
 
@@ -96,10 +99,16 @@ def remove_contact(contact_id):
     """ Update / Delete route expect contact_id as URL path and set it as deleted """
     if not request.args.get("method"): 
         abort(400)
+
+    if db.session.query(models.Post).filter_by(id=contact_id).first() is None:
+        return jsonify({"status": 0, "error": "Not found"})
         
     if request.args.get("method") == 'update':
         if not request.args.get("contact_phone"): 
             abort(400)
+        if db.session.query(models.Post).filter_by(contact_phone=request.args.get("contact_phone")).first() is not None:
+            return jsonify({"status": 0, "error": "Phone exists"})
+
         db_update = {"contact_phone": request.args.get("contact_phone")}
     elif request.args.get("method") == 'delete':
         db_update = {"deleted": 1}
@@ -107,12 +116,13 @@ def remove_contact(contact_id):
         abort(400)
 
     try:
-        db.session.query(models.Post).filter_by(id == contact_id).\
+        db.session.query(models.Post).filter_by(id=contact_id).\
             update(db_update)
         db.session.commit()
         result = {"status": 1}
     except Exception as e:
         result = {"status": 0, "error": repr(e)}
+    
 
     return jsonify(result)
 
