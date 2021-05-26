@@ -12,19 +12,16 @@ from flask import (
 from flask_cors import CORS
 
 from flask_sqlalchemy import * # SQLAlchemy
-from pathlib import Path
 
-baseDir = Path(__file__).resolve().parent
+basedir = Path(__file__).resolve().parent
 
 # CONFIGS
 DEBUG = True
-DATABASE = "database/horus.db"
+DATABASE = "app.db"
 USERNAME = "admin"
 PASSWORD = "admin"
 SECRET_KEY = "bnatali" # Hey, it`s me
-SQLALCHEMY_DATABASE_URI = os.getenv(
-    "DATABASE_URL", f"sqlite:///{Path(basedir).joinpath(DATABASE)}"
-)
+SQLALCHEMY_DATABASE_URI = f"sqlite:///{Path(basedir).joinpath(DATABASE)}"
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 # INSTANTIATE APP
@@ -44,22 +41,19 @@ def connect_db():
     rv.row_factory = sqlite3.Row
     return rv
 
-
 # create the database
 def init_db():
     with app.app_context():
         db = get_db()
-        with app.open_resource("database/schema.sql", mode="r") as f:
+        with app.open_resource("../database/schema.sql", mode="r") as f:
             db.cursor().executescript(f.read())
         db.commit()
-
 
 # open database connection
 def get_db():
     if not hasattr(g, "sqlite_db"):
         g.sqlite_db = connect_db()
     return g.sqlite_db
-
 
 # close database connection
 @app.teardown_appcontext
@@ -78,7 +72,7 @@ CORS(app, resources={r'/*': {'origins': '*'}})
 @app.route('/', methods=['GET'])
 def list_contact():
     """ Root route returns a contact list in JSON form if is GET method"""
-    return jsonify(db.session.query(models.Post))
+    return jsonify(db.session.query(models.Post).all())
 
 @app.route('/new/', methods=['POST'])
 def new_contact():
@@ -92,7 +86,7 @@ def new_contact():
         db.session.commit()
         result = {"status": 1}
     except Exception as e:
-        result = {"status": 0}
+        result = {"status": 0, "error": repr(e)}
 
     return jsonify(result)
 
@@ -117,15 +111,12 @@ def remove_contact(contact_id):
         db.session.commit()
         result = {"status": 1}
     except Exception as e:
-        result = {"status": 0}
+        result = {"status": 0, "error": repr(e)}
 
     return jsonify(result)
 
 
 # KNOW IF WAS CALLED FROM TERMINAL OR AS A MODULE
 if __name__ == '__main__':
-    # Initialize DB if not exists
-    if not os.path.isfile('filename.txt'):
-        init_db()
     # Listen on any IP
     app.run(host='0.0.0.0', port=5000)
