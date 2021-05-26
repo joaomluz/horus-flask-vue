@@ -1,19 +1,24 @@
+import sqlite3
+import os.path
+from pathlib import Path
+
 from flask import (
     Flask, 
     jsonify,
-    # For this demonstration we`ll not use render_template, frot-end will be handled by Vue, but stay there for future updates 
-    render_template 
+    request,
+    abort,
+    g
 )
 from flask_cors import CORS
 
-from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import * # SQLAlchemy
 from pathlib import Path
 
 baseDir = Path(__file__).resolve().parent
 
 # CONFIGS
 DEBUG = True
-DATABASE = "horus.db"
+DATABASE = "database/horus.db"
 USERNAME = "admin"
 PASSWORD = "admin"
 SECRET_KEY = "bnatali" # Hey, it`s me
@@ -28,6 +33,39 @@ app.config.from_object(__name__)
 
 # INITIALIZE DB 
 db = SQLAlchemy(app)
+
+#
+# DATABASE FUNCTIONS
+# 
+# connect to database
+def connect_db():
+    """Connects to the database."""
+    rv = sqlite3.connect(app.config["DATABASE"])
+    rv.row_factory = sqlite3.Row
+    return rv
+
+
+# create the database
+def init_db():
+    with app.app_context():
+        db = get_db()
+        with app.open_resource("database/schema.sql", mode="r") as f:
+            db.cursor().executescript(f.read())
+        db.commit()
+
+
+# open database connection
+def get_db():
+    if not hasattr(g, "sqlite_db"):
+        g.sqlite_db = connect_db()
+    return g.sqlite_db
+
+
+# close database connection
+@app.teardown_appcontext
+def close_db(error):
+    if hasattr(g, "sqlite_db"):
+        g.sqlite_db.close()
 
 from project import models
 
@@ -86,5 +124,8 @@ def remove_contact(contact_id):
 
 # KNOW IF WAS CALLED FROM TERMINAL OR AS A MODULE
 if __name__ == '__main__':
+    # Initialize DB if not exists
+    if not os.path.isfile('filename.txt'):
+        init_db()
     # Listen on any IP
     app.run(host='0.0.0.0', port=5000)
