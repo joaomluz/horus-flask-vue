@@ -1,19 +1,77 @@
+<!--
+  MAIN PAGE
+-->
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-10">
+        <h1>Contatos telefônicos</h1>
+        <hr><br><br>
+        <button type="button" class="btn btn-success btn-sm">Novo contato</button>
+        <br><br>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Nome</th>
+              <th scope="col">Telefone</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{ contact.id }}</td>
+              <td>{{ contact.contact_name }}</td>
+              <td>{{ contact.contact_phone }}</td>
+              <td>
+                <div class="btn-group" role="group">
+                  <button type="button" class="btn btn-warning btn-sm">Update</button>
+                  <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </template>
 
-<script>
-import HelloWorld from './components/HelloWorld.vue'
 
+<!--
+  SCRIPTS THAT WILL INTERACT WITH BACKEND
+-->
+<script>
+import axios from 'axios';
+//import VueAxios from 'vue-axios'
+
+console.error("passou aqui");
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+  data() {
+    return {
+      contact: [],
+    };
+  },
+  methods: {
+    /**
+     * List all contacts registered in DB
+    */
+    listContacts() {
+      const path = location.protocol + '//' + location.hostname + ':5000/';
+      axios.get(path)
+        .then((res) => {
+          this.contact = res.data;
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.error(error);
+        });
+    },
+  },
+  created() {
+    this.listContacts();
+  },
+};
 </script>
 
 <style>
