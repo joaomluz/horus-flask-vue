@@ -19,7 +19,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
+            <tr v-for="(contact, index) in contacts" :key="index">
               <td>{{ contact.id }}</td>
               <td>{{ contact.contact_name }}</td>
               <td>{{ contact.contact_phone }}</td>
@@ -44,12 +44,10 @@
 <script>
 import axios from 'axios';
 //import VueAxios from 'vue-axios'
-
-console.error("passou aqui");
 export default {
   data() {
     return {
-      contact: [],
+      contacts: [],
     };
   },
   methods: {
@@ -60,7 +58,7 @@ export default {
       const path = location.protocol + '//' + location.hostname + ':5000/';
       axios.get(path)
         .then((res) => {
-          this.contact = res.data;
+          this.contacts = res.data.json_list;
         })
         .catch((error) => {
           // eslint-disable-next-line
