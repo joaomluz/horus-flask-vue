@@ -62,33 +62,19 @@ O endereço utilizado do servidor para essa documentação será 127.0.0.1, mas 
 As respostas serão dadas em JSON.   
 - Listando os contatos
     - [GET] http://127.0.0.1/
-    - [JSON] ```yaml 
-                {["id": 1, "contact_name": "nome", "contact_phone": "+55119000080000"], ...}
-            ```
+    - [JSON] {["id": 1, "contact_name": "nome", "contact_phone": "+55119000080000"], ...}
 - Adicionando um novo contato
     - [POST] http://127.0.0.1/new/?contact_name=nome&contact_phone=+55119000080000
-    - [JSON] ```yaml 
-                {"status": 1} 
-            ```
-    - [JSON-ERR] ```yaml 
-                {"status": 0, "error": "SQL error | Phone exists"}
-            ```
+    - [JSON] {"status": 1} 
+    - [JSON-ERR] {"status": 0, "error": "SQL error | Phone exists"}
 - Alterando um telefone
     - [GET] http://127.0.0.1/update/1?method=update&contact_phone=+15962547896
-    - [JSON] ```yaml 
-                {"status": 1}
-            ```
-    - [JSON-ERR] ```yaml 
-                {"status": 0, "error": "SQL error | Phone exists | Not found"} 
-            ```
+    - [JSON] {"status": 1}
+    - [JSON-ERR] {"status": 0, "error": "SQL error | Phone exists | Not found"} 
 - Removendo um contato
     - [GET] http://127.0.0.1/update/1?method=delete
-    - [JSON] ```yaml 
-                {"status": 1} 
-            ```
-    - [JSON-ERR] ```yaml 
-                {"status": 0, "error": "SQL error | Phone exists | Not found"} 
-            ```
+    - [JSON] {"status": 1} 
+    - [JSON-ERR] {"status": 0, "error": "SQL error | Phone exists | Not found"} 
 
 Obs. Se alguma query ou path URL não for cumprido, um HTTP 400 será retornado.
 
