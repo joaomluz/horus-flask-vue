@@ -19,19 +19,29 @@ LINUX_CODENAME=$(dpkg --status tzdata|grep Provides|cut -f2 -d'-')
 LINUX_RUNNING_ARM=$(if [ $(uname -m | grep 'armv7') ]; then echo "arm"; else echo "x86"; fi) # Only support ARMv7 or x86
 
 if [ $# -eq 0 ]; then
-	INSTALL_DIR = '/opt/BrunoNatali/'
+	INSTALL_DIR='/opt/BrunoNatali/'
 else 
-	INSTALL_DIR = $1
-    echo "App will be installed into: $1"
-    echo "Press ctrl + C to abort ... "
-    COUNTER=0
-    TEMP_C=10
-    while [  $COUNTER -lt 10 ]; do
-        echo -n "${TEMP_C} "
-        sleep 1
-        let COUNTER=COUNTER+1 
-        let TEMP_C=TEMP_C-1
-    done
+	INSTALL_DIR=$1
+fi
+echo "App will be installed into: $INSTALL_DIR"
+echo "Press ctrl + C to abort ... "
+COUNTER=0
+TEMP_C=10
+while [  $COUNTER -lt 10 ]; do
+    echo -n "${TEMP_C} "
+    sleep 1
+    let COUNTER=COUNTER+1 
+    let TEMP_C=TEMP_C-1
+done
+
+echo " "
+if [ ! -d "$INSTALL_DIR" ]; then
+    mkdir -p "$INSTALL_DIR" 2> /dev/null
+    chmod -R 777 "$INSTALL_DIR" 2> /dev/null # This is not secure, but work 
+fi
+
+if [ ! -f "INSTALL.path" ] || [ $INSTALL_DIR != $(<INSTALL.path)]; then
+    sh -c "echo $INSTALL_DIR > INSTALL.path" 
 fi
 
 # Check if program is installed & install if necessary
@@ -83,17 +93,21 @@ check_app_installed()
 }
 
 echo "Verifying installed apps ..."
-# Check required installed apps
 INSTALLED_APPS=$(dpkg -l | grep -E '^ii')
 REQUIRED_APPS=(\
 'python3.9' \
 'python3-pip' \
+'python3-venv' \
 'nodejs' \
 'npm' \
 )
+for i in "${REQUIRED_APPS[@]}"; do
+    check_app_installed $i
+done
 
-python3.9 -m venv env
-source env/bin/activate
-pip install Flask==1.1.2 Flask-Cors==3.0.10
-
-npm install -g @vue/cli@4.5.11
+echo ""
+echo "APPs version:"
+python3 -V
+echo -n "Node "
+nodejs -v
+echo ""
