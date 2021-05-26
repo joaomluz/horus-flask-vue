@@ -15,6 +15,7 @@ def test_index():
     assert response.status_code == 200
 
 def test_add_new_contact():
+    """" Creates new contact and check returned status """
     tester = app.test_client()
     response = tester.post("/new/?contact_name=test&contact_phone=0101010101987654321", content_type="application/json", follow_redirects=True)
     json_data = json.loads(response.data)
@@ -23,6 +24,7 @@ def test_add_new_contact():
     assert json_data['status'] == 1
 
 def test_remove_same_contact():
+    """" Recover contacts list and remove previously added contact """
     tester = app.test_client()
     response = tester.get("/", content_type="application/json")
     json_data = json.loads(response.data)
