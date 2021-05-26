@@ -1,6 +1,8 @@
+import pytest
+import json
 from pathlib import Path
 
-from project.app import app, init_db
+from project.server import app, init_db
 
 
 def test_index():
@@ -13,4 +15,4 @@ def test_index():
 
 def test_database():
     init_db()
-    assert Path("horus.db").is_file()
+    assert Path("project/app.db").is_file()
