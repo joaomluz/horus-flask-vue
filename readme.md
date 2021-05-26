@@ -8,7 +8,7 @@ Objetivo geral: Criar uma pequena aplicação para que um usuário possa gerenci
 * [Requirements](#requirements)
 * [Installation](#installation)
 * [Backend](#backend)
-    * [Queries and Routes](#queries-n-routes)
+    * [Queries and Routes](#queries-and-routes)
     * [Starting up backend](#starting-up-backend)
     * [Testing backend](#testing-backend)
 ## Before start
@@ -62,31 +62,31 @@ O endereço utilizado do servidor para essa documentação será 127.0.0.1, mas 
 As respostas serão dadas em JSON.   
 - Listando os contatos
     - [GET] http://127.0.0.1/
-    - [JSON] ```json 
-        {["id": 1, "contact_name": "nome", "contact_phone": "+55119000080000"], ...}
-    ```
+    - [JSON] ```yaml 
+                {["id": 1, "contact_name": "nome", "contact_phone": "+55119000080000"], ...}
+            ```
 - Adicionando um novo contato
     - [POST] http://127.0.0.1/new/?contact_name=nome&contact_phone=+55119000080000
-    - [JSON] ```json 
+    - [JSON] ```yaml 
                 {"status": 1} 
             ```
-    - [JSON-ERR] ```json 
+    - [JSON-ERR] ```yaml 
                 {"status": 0, "error": "SQL error | Phone exists"}
             ```
 - Alterando um telefone
     - [GET] http://127.0.0.1/update/1?method=update&contact_phone=+15962547896
-    - [JSON] ```json 
+    - [JSON] ```yaml 
                 {"status": 1}
             ```
-    - [JSON-ERR] ```json 
+    - [JSON-ERR] ```yaml 
                 {"status": 0, "error": "SQL error | Phone exists | Not found"} 
             ```
 - Removendo um contato
     - [GET] http://127.0.0.1/update/1?method=delete
-    - [JSON] ```json 
+    - [JSON] ```yaml 
                 {"status": 1} 
             ```
-    - [JSON-ERR] ```json 
+    - [JSON-ERR] ```yaml 
                 {"status": 0, "error": "SQL error | Phone exists | Not found"} 
             ```
 
