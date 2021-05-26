@@ -72,7 +72,8 @@ CORS(app, resources={r'/*': {'origins': '*'}})
 @app.route('/', methods=['GET'])
 def list_contact():
     """ Root route returns a contact list in JSON form if is GET method"""
-    return jsonify(db.session.query(models.Post).all())
+    qryresult = db.session.query(models.Post).filter_by(deleted=0)
+    return jsonify(json_list=[i.serialize for i in qryresult.all()])
 
 @app.route('/new/', methods=['POST'])
 def new_contact():
@@ -106,7 +107,7 @@ def remove_contact(contact_id):
         abort(400)
 
     try:
-        db.session.query.filter_by(id == contact_id).\
+        db.session.query(models.Post).filter_by(id == contact_id).\
             update(db_update)
         db.session.commit()
         result = {"status": 1}

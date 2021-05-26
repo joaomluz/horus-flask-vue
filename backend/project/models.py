@@ -11,3 +11,12 @@ class Post(db.Model):
         self.contact_name = contact_name
         self.contact_phone = contact_phone
         self.deleted = deleted
+    
+    @property
+    def serialize(self):
+       """Return object data in easily serializable format"""
+       return {
+           'id': self.id,
+           'contact_name': self.contact_name,
+           'contact_phone': self.contact_phone
+       }
