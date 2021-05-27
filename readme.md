@@ -101,7 +101,7 @@ $ python -m pytest
 ```
 
 ## Frontend
-O frontend ainda está sendo finalizado, para que contemple todas as operações de CRUD as quais o backend é capaz de lidar, mas ele já possui uma interface amigável e é capaz de listar os contatos inseridos no banco.   
+O frontend ainda está sendo finalizado para que contemple todas as operações de CRUD as quais o backend é capaz de lidar, mas ele já possui uma interface amigável e é capaz de listar os contatos inseridos no banco.   
 
 Para iniciar o frontend foi criado um script, run-fron-end.sh, dessa forma basta entrar na pasta do projeto e executar:
 ```bash
