@@ -51,6 +51,7 @@ export default {
     };
   },
   methods: {
+    
     /**
      * List all contacts registered in DB
     */

@@ -11,6 +11,7 @@ Objetivo geral: Criar uma pequena aplicação para que um usuário possa gerenci
     * [Queries and Routes](#queries-and-routes)
     * [Starting up backend](#starting-up-backend)
     * [Testing backend](#testing-backend)
+* [Frontend](#frontend)
 ## Before start
 Foi desenvolvido alguns scripts para facilitar a instalção e operação, mas é possível executar õs comandos de maneira manual   
 
@@ -39,6 +40,7 @@ Assim que o sistema estiver pronto para receber os pacotes das stacks mencionada
 ```bash 
 $ ./install-apps.sh
 ```
+Quando for solicitado para escolher a isntalação do Vue, selecione os defaults para Vue 2 e aparte ENTER
 
 ## Backend
 O Backend foi escrito em FLask, Flask é um pequeno framework web escrito em Python.   
@@ -97,3 +99,13 @@ $ cd /path/to/install/backend
 $ source env/bin/activate
 $ python -m pytest
 ```
+
+## Frontend
+O frontend ainda está sendo finalizado, para que contemple todas as operações de CRUD as quais o backend é capaz de lidar, mas ele já possui uma interface amigável e é capaz de listar os contatos inseridos no banco.   
+
+Para iniciar o frontend foi criado um script, run-fron-end.sh, dessa forma basta entrar na pasta do projeto e executar:
+```bash
+$ ./run-fron-end.sh 
+```
+
+A Documentação nessa seção não está concluida, para maiores informações navegue nas pastas e arquivos de client\src, todos eles integram esse projeto
