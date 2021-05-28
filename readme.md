@@ -12,6 +12,8 @@ Objetivo geral: Criar uma pequena aplicação para que um usuário possa gerenci
     * [Starting up backend](#starting-up-backend)
     * [Testing backend](#testing-backend)
 * [Frontend](#frontend)
+    * [Starting up frontend](#starting-up-frontend)
+    * [Creating new contact](#creating-new-contact)
 ## Before start
 Foi desenvolvido alguns scripts para facilitar a instalção e operação, mas é possível executar õs comandos de maneira manual   
 
@@ -101,11 +103,28 @@ $ python -m pytest
 ```
 
 ## Frontend
-O frontend ainda está sendo finalizado para que contemple todas as operações de CRUD as quais o backend é capaz de lidar, mas ele já possui uma interface amigável e é capaz de listar os contatos inseridos no banco.   
+O frontend ainda está sendo finalizado para que contemple todas as operações de CRUD as quais o backend é capaz de lidar, mas ele já possui uma interface amigável e é capaz de adicionar novos contatos e listar os contatos inseridos no banco.   
 
-Para iniciar o frontend foi criado um script, run-fron-end.sh, dessa forma basta entrar na pasta do projeto e executar:
+Segue a tela principal, onde é listado os contatos:   
+![list-page](/img/contacts-list.PNG)
+
+Obs. A Documentação nessa seção não está concluida, para maiores informações navegue nas pastas e arquivos de client\src, todos eles integram esse projeto
+
+### Starting up frontend
+Para iniciar o frontend foi criado um script, run-fron-end.sh, dessa forma basta entrar na pasta do projeto e executar:   
 ```bash
 $ ./run-fron-end.sh 
 ```
+Obs. O frontend irá iniciar em modo de desenvolvimento, pois ainda não existe uma certificação de que tudo esteja funcionando corretamente e livre de bugs. 
 
-A Documentação nessa seção não está concluida, para maiores informações navegue nas pastas e arquivos de client\src, todos eles integram esse projeto
+### Creating new contact
+A criação de um novo contato a partir do backend é feita através do botão "Novo contato", localizado na perte superior esquerda.  
+
+Essa requisição é feita para o backend seguindo a [documentação](#queries-and-routes).   
+
+Deve se preencher os campos:
+- Nome, com o nome do novo contato
+- Telefone, com o telefone desse contato
+
+Segue exemplo do modal que irá aparecer:
+![new-contact-modal](/img/add-new-contact-modal.PNG)
