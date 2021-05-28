@@ -33,3 +33,4 @@ vue create client
 npm install vue-router --save
 npm install axios@0.21.1 --save
 npm install bootstrap@4.6.0 --save
+npm install bootstrap-vue@2.21.2 --save

@@ -10,6 +10,7 @@ import axios from 'axios';
 /**
  * Ohter specific dep
 */
+import BootstrapVue from 'bootstrap-vue';
 import 'bootstrap/dist/css/bootstrap.css';
 
 /**
@@ -18,7 +19,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import Contacts from './components/Contacts.vue';
 
 Vue.config.productionTip = false
-Vue.use(Router, axios);
+Vue.use(BootstrapVue, Router, axios);
 // Vue.http.headers.common['Access-Control-Allow-Origin'] = '*'
 
 /**
