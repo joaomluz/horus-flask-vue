@@ -34,7 +34,14 @@
               <td>{{ contact.contact_phone }}</td>
               <td>
                 <div class="btn-group" role="group">
-                  <button type="button" class="btn btn-warning btn-sm">Update</button>
+                  <button 
+                    type="button" 
+                    class="btn btn-warning btn-sm" 
+                    @click="onUpdate(contact)"
+                    v-b-modal.update-contact-modal>
+                    Update
+                  </button>
+
                   <button type="button" class="btn btn-danger btn-sm" @click="onDelete(contact)">Delete</button>
                 </div>
               </td>
@@ -45,9 +52,9 @@
     </div>
 
     <!-- 
-      Modal for add new user
+      Modal for add new contact
     -->
-    <b-modal ref="manageContactModal" id="manage-contact-modal" title="Novo contato" hide-footer>
+    <b-modal ref="addContactModal" id="manage-contact-modal" title="Novo contato" hide-footer>
       <b-form @submit="onSubmit" class="w-100">
         <b-form-group id="form-name-group" label="Nome:" label-for="form-name-input">
           <b-form-input id="form-name-input" type="text" v-model="addContactForm.name" required placeholder="Nome do contato"></b-form-input>
@@ -56,6 +63,18 @@
           <b-form-input id="form-tel-number-input" type="text" v-model="addContactForm.number" required placeholder="Número de telefone"></b-form-input>
         </b-form-group>
         <b-button type="submit" variant="primary">Salvar</b-button>
+      </b-form>
+    </b-modal>
+
+    <!-- 
+      Modal for update existing contact
+    -->
+    <b-modal ref="updateContactModal" id="update-contact-modal" title="Alterar telefone" hide-footer>
+      <b-form @submit="onUpdateRequest" class="w-100">
+        <b-form-group id="form-tel-number-group" label="Telefone:" label-for="form-tel-number-input">
+          <b-form-input id="form-tel-number-input" type="text" v-model="editContactForm.number" required placeholder="Número de telefone"></b-form-input>
+        </b-form-group>
+        <b-button type="submit" variant="primary">Atualizar</b-button>
       </b-form>
     </b-modal>
   </div>
@@ -75,6 +94,9 @@ export default {
       contacts: [],
       addContactForm: {
         name: '',
+        number: ''
+      },
+      editContactForm: {
         number: ''
       },
       message: '',
@@ -112,7 +134,7 @@ export default {
           if (response.data.status) {
             this.message = "Contato criado com sucesso";
           } else {
-            this.message = response.data.error;
+            this.message = 'ERRO: ' + response.data.error;
           }
 
           this.displayStatus = true;
@@ -139,7 +161,34 @@ export default {
           if (response.data.status) {
             this.message = "Contato removido";
           } else {
-            this.message = response.data.error;
+            this.message = 'ERRO: ' + response.data.error;
+          }
+
+          this.displayStatus = true;
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+
+          this.listContacts();
+        });
+    },
+    /**
+     * Updates contact with given ID
+     * 
+     * @param {object} data Object with ID & new Number
+    */
+    updateContact(data) {
+      const path = location.protocol + '//' + location.hostname + 
+        ':5000/update/' + data.id + '?method=update&contact_phone=' + data.number;
+
+      axios.get(path)
+        .then((response) => {
+          this.listContacts();
+          if (response.data.status) {
+            this.message = "Contato atualizado";
+          } else {
+            this.message = 'ERRO: ' + response.data.error;
           }
 
           this.displayStatus = true;
@@ -162,7 +211,7 @@ export default {
     */
     onSubmit(evt) {
       evt.preventDefault(); // Handle any other request
-      this.$refs.manageContactModal.hide();
+      this.$refs.addContactModal.hide();
 
       const data = {
         name: this.addContactForm.name,
@@ -174,9 +223,33 @@ export default {
       this.initForm();
     },
     /**
+     * Update contact submit callback
+     * 
+     * @param {object} evt The modal submit event 
+    */
+    onUpdateRequest(evt) {
+      evt.preventDefault(); // Handle any other request
+      this.$refs.updateContactModal.hide();
+
+      this.updateContact({
+        id: this.editContactForm.id,
+        number: this.editContactForm.number
+      });
+      this.initForm();
+    },
+    /**
+     * Just pop-up edit modal
+     * 
+     * @param {object} contact clicked element
+    */
+    onUpdate(contact) {
+      this.editContactForm.id = contact.id;
+      this.editContactForm.number = contact.contact_phone;
+    },
+    /**
      * Handle delete contact button
      * 
-     * @param {object} element clicked element
+     * @param {object} contact clicked element
     */
     onDelete(contact) {
       this.rmContact(contact.id)
