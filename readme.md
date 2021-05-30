@@ -14,6 +14,8 @@ Objetivo geral: Criar uma pequena aplicação para que um usuário possa gerenci
 * [Frontend](#frontend)
     * [Starting up frontend](#starting-up-frontend)
     * [Creating new contact](#creating-new-contact)
+    * [Updating contact](#updating-contact)
+    * [Removing contact](#removing-contact)
 ## Before start
 Foi desenvolvido alguns scripts para facilitar a instalção e operação, mas é possível executar õs comandos de maneira manual   
 
@@ -128,3 +130,12 @@ Deve se preencher os campos:
 
 Segue exemplo do modal que irá aparecer:
 ![new-contact-modal](/img/add-new-contact-modal.PNG)
+
+### Updating contact
+Para atualizar um contato, clique em "Update" ao lado do contato que deseja atualizar, altere o número de telefone e clique no botão "Atualizar".   
+
+Se tudo ocorrer como planejado, a mensagem "Contato atualizado" deve aparecer na tela.   
+
+### Removing contact
+Para remover um contato, basta clicar no botão "Delete" ao lado do contato, a mensagem "Contato removido" confirma a remoção.   
+[ATENÇÃO] Não existe confirmação para a remoção do contato.   
