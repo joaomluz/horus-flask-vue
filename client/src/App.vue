@@ -3,12 +3,21 @@
 -->
 <template>
   <div class="container">
+    <!--
+      Main table
+    -->
     <div class="row">
       <div class="col-sm-10">
         <h1>Contatos telefônicos</h1>
         <hr><br><br>
         <button type="button" class="btn btn-success btn-sm" v-b-modal.manage-contact-modal>Novo contato</button>
         <br><br>
+
+        <!-- 
+          Action - returned status
+        -->
+        <alert :message="message" v-if="displayStatus"></alert>
+
         <table class="table table-hover">
           <thead>
             <tr>
@@ -26,7 +35,7 @@
               <td>
                 <div class="btn-group" role="group">
                   <button type="button" class="btn btn-warning btn-sm">Update</button>
-                  <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                  <button type="button" class="btn btn-danger btn-sm" @click="onDelete(contact)">Delete</button>
                 </div>
               </td>
             </tr>
@@ -35,6 +44,9 @@
       </div>
     </div>
 
+    <!-- 
+      Modal for add new user
+    -->
     <b-modal ref="manageContactModal" id="manage-contact-modal" title="Novo contato" hide-footer>
       <b-form @submit="onSubmit" class="w-100">
         <b-form-group id="form-name-group" label="Nome:" label-for="form-name-input">
@@ -55,7 +67,8 @@
 -->
 <script>
 import axios from 'axios';
-//import VueAxios from 'vue-axios'
+import Alert from './components/Alert.vue';
+
 export default {
   data() {
     return {
@@ -63,7 +76,9 @@ export default {
       addContactForm: {
         name: '',
         number: ''
-      }
+      },
+      message: '',
+      displayStatus: false
     };
   },
   methods: {
@@ -92,8 +107,42 @@ export default {
         ':5000/new/?contact_name=' + data.name + '&contact_phone=' + data.number;
 
       axios.post(path)
-        .then(() => {
+        .then((response) => {
           this.listContacts();
+          if (response.data.status) {
+            this.message = "Contato criado com sucesso";
+          } else {
+            this.message = response.data.error;
+          }
+
+          this.displayStatus = true;
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+
+          this.listContacts();
+        });
+    },
+    /**
+     * Removes contact with given ID
+     * 
+     * @param {int} id Contact UID
+    */
+    rmContact(id) {
+      const path = location.protocol + '//' + location.hostname + 
+        ':5000/update/' + id + '?method=delete';
+
+      axios.get(path)
+        .then((response) => {
+          this.listContacts();
+          if (response.data.status) {
+            this.message = "Contato removido";
+          } else {
+            this.message = response.data.error;
+          }
+
+          this.displayStatus = true;
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -123,10 +172,21 @@ export default {
       // Request and update list
       this.addContact(data);
       this.initForm();
+    },
+    /**
+     * Handle delete contact button
+     * 
+     * @param {object} element clicked element
+    */
+    onDelete(contact) {
+      this.rmContact(contact.id)
     }
   },
   created() {
     this.listContacts();
+  },
+  components: {
+    alert: Alert
   }
 };
 </script>

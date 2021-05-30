@@ -20,7 +20,8 @@ import Contacts from './components/Contacts.vue';
 
 Vue.config.productionTip = false
 Vue.use(BootstrapVue, Router, axios);
-// Vue.http.headers.common['Access-Control-Allow-Origin'] = '*'
+
+// Vue.http.headers.common['Access-Control-Allow-Origin'] = '*' // ENABLE CORS
 
 /**
  * Note that this route will be not used for now
