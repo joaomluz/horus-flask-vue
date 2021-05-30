@@ -78,7 +78,10 @@ def new_contact():
     if not request.args.get("contact_name") or not request.args.get("contact_phone"):
         abort(400)
 
-    if db.session.query(models.Post).filter_by(contact_phone=request.args.get("contact_phone")).first() is None:
+    if db.session.query(models.Post).filter_by(
+        contact_phone=request.args.get("contact_phone"),
+        deleted=0
+    ).first() is None:
         try:
             new_entry = models.Post(request.args.get("contact_name"), request.args.get("contact_phone"))
             db.session.add(new_entry)
@@ -103,7 +106,10 @@ def remove_contact(contact_id):
     if request.args.get("method") == 'update':
         if not request.args.get("contact_phone"): 
             abort(400)
-        if db.session.query(models.Post).filter_by(contact_phone=request.args.get("contact_phone")).first() is not None:
+        if db.session.query(models.Post).filter_by(
+            contact_phone=request.args.get("contact_phone"),
+            deleted=0
+        ).first() is not None:
             return jsonify({"status": 0, "error": "Phone exists"})
 
         db_update = {"contact_phone": request.args.get("contact_phone")}
