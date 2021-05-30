@@ -105,7 +105,7 @@ $ python -m pytest
 ```
 
 ## Frontend
-O frontend ainda está sendo finalizado para que contemple todas as operações de CRUD as quais o backend é capaz de lidar, mas ele já possui uma interface amigável e é capaz de adicionar novos contatos e listar os contatos inseridos no banco.   
+O frontend é capaz de executar todas as fuções previstas de CRUD, interagindo com o backend e posicionando o cliente sobre o resultado.   
 
 Segue a tela principal, onde é listado os contatos:   
 ![list-page](/img/contacts-list.PNG)
